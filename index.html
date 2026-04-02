@@ -4,407 +4,198 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="LayerBru" />
-  <meta name="theme-color" content="#F97316" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <title>LayerBru Workshop</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg:      #0e0e0e;
-      --surface: #161616;
-      --border:  #2a2a2a;
-      --accent:  #f97316;
-      --accent2: #facc15;
-      --text:    #e8e8e8;
-      --muted:   #666;
-      --green:   #22c55e;
-      --blue:    #38bdf8;
-      --purple:  #a78bfa;
-      --red:     #ef4444;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { -webkit-box-sizing: border-box; box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
+      background: #0e0e0e;
+      color: #e8e8e8;
       font-family: 'Barlow', sans-serif;
-      overflow-x: hidden;
+      min-height: 100%;
+      -webkit-text-size-adjust: none;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Scanlines */
-    body::before {
+    body:before {
       content: '';
       position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
-      );
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: -webkit-repeating-linear-gradient(top, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+      background: repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
       pointer-events: none;
       z-index: 999;
     }
 
-    /* ── Header ──────────────────────────────────────── */
-    header {
-      padding: env(safe-area-inset-top, 12px) 20px 14px;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      background: var(--surface);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    /* Header */
+    .hdr {
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid #2a2a2a;
+      display: -webkit-box; display: -webkit-flex; display: flex;
+      -webkit-box-align: end; -webkit-align-items: flex-end; align-items: flex-end;
+      -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
+      background: #161616;
     }
 
     .brand-name {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 0.06em;
-      color: var(--accent);
-      text-shadow: 0 0 24px rgba(249,115,22,0.4);
-      line-height: 1;
+      font-size: 2rem; letter-spacing: 0.06em;
+      color: #f97316; text-shadow: 0 0 24px rgba(249,115,22,0.4); line-height: 1;
     }
-
     .brand-sub {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 0.55rem;
-      color: var(--muted);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-top: 3px;
+      font-size: 0.55rem; color: #666; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 3px;
     }
-
     .clock-wrap { text-align: right; }
+    #clock { font-family: 'Share Tech Mono', monospace; font-size: 1.3rem; color: #facc15; letter-spacing: 0.08em; }
+    #date  { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: #666; letter-spacing: 0.1em; margin-top: 2px; }
 
-    #clock {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 1.3rem;
-      color: var(--accent2);
-      letter-spacing: 0.08em;
-    }
-
-    #date {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.55rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-top: 2px;
-    }
-
-    /* ── Status bar ──────────────────────────────────── */
-    .status-bar {
+    /* Status bar */
+    .sbar {
       padding: 8px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      background: var(--bg);
+      border-bottom: 1px solid #2a2a2a;
+      display: -webkit-box; display: -webkit-flex; display: flex;
+      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+      gap: 14px;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; color: #666;
+    }
+    .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+    .dg { background: #22c55e; }
+    .dr { background: #ef4444; }
+
+    /* Main */
+    .main { padding: 16px; }
+    .section { margin-bottom: 20px; }
+    .sec-lbl {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.2em; color: #666; text-transform: uppercase; margin-bottom: 8px; padding-left: 2px;
     }
 
-    .dot {
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      margin-right: 5px;
-    }
-    .dot.green  { background: var(--green); animation: pulse 2s infinite; }
-    .dot.red    { background: var(--red); }
-    .dot.yellow { background: var(--accent2); animation: pulse 2s infinite; }
-
-    @keyframes pulse {
-      0%,100% { opacity: 1; }
-      50%      { opacity: 0.2; }
-    }
-
-    /* ── Main scroll area ────────────────────────────── */
-    main {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
-    }
-
-    /* ── Section label ───────────────────────────────── */
-    .section-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.2em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      padding-left: 2px;
-    }
-
-    /* ── Base card ───────────────────────────────────── */
+    /* Card */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.1s, background 0.15s;
-      -webkit-user-select: none;
-      user-select: none;
+      background: #161616; border: 1px solid #2a2a2a; border-left: 4px solid #2a2a2a;
+      border-radius: 4px; padding: 18px 16px; margin-bottom: 10px;
+      position: relative; overflow: hidden; cursor: pointer;
+      -webkit-user-select: none; user-select: none;
+    }
+    .card:active { opacity: 0.72; }
+    .crow { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-align: center; -webkit-align-items: center; align-items: center; gap: 14px; }
+    .cicon { font-size: 1.8rem; width: 40px; text-align: center; -webkit-flex-shrink: 0; flex-shrink: 0; }
+    .cbody { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 0; }
+    .clbl  { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; color: #666; text-transform: uppercase; }
+    .cval  { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.04em; line-height: 1.1; margin-top: 2px; color: #666; }
+    .cdesc { font-family: 'Share Tech Mono', monospace; font-size: 0.52rem; color: #666; letter-spacing: 0.1em; margin-top: 3px; text-transform: uppercase; }
+    .cbadge {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em;
+      padding: 4px 8px; border-radius: 3px; border: 1px solid #2a2a2a; color: #666;
+      -webkit-flex-shrink: 0; flex-shrink: 0;
     }
 
-    .card:active { transform: scale(0.97); background: #1e1e1e; }
+    /* Card colour states */
+    .cg { border-left-color: #22c55e; }
+    .cb { border-left-color: #38bdf8; }
+    .co { border-left-color: #f97316; }
+    .cy { border-left-color: #facc15; }
+    .cr { border-left-color: #ef4444; }
+    .cp { border-left-color: #a78bfa; }
 
-    .card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s;
+    .vg { color: #22c55e !important; }
+    .vb { color: #38bdf8 !important; }
+    .vo { color: #f97316 !important; }
+    .vy { color: #facc15 !important; }
+    .vr { color: #ef4444 !important; }
+    .vp { color: #a78bfa !important; }
+    .vm { color: #666 !important; }
+
+    /* Grids */
+    .g2 { display: -webkit-box; display: -webkit-flex; display: flex; gap: 10px; margin-bottom: 10px; }
+    .g2 > * { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
+    .g4 { display: -webkit-box; display: -webkit-flex; display: flex; gap: 8px; margin-bottom: 10px; }
+    .g4 > * { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
+
+    /* Action card */
+    .ac {
+      background: #161616; border: 1px solid #2a2a2a; border-top: 3px solid #2a2a2a;
+      border-radius: 4px; padding: 14px 8px; text-align: center;
+      cursor: pointer; -webkit-user-select: none; user-select: none;
     }
+    .ac:active { opacity: 0.7; }
+    .aicon { font-size: 1.3rem; }
+    .aname { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.04em; margin-top: 6px; line-height: 1; }
+    .adesc { font-family: 'Share Tech Mono', monospace; font-size: 0.48rem; color: #666; letter-spacing: 0.08em; margin-top: 3px; text-transform: uppercase; }
 
-    /* Left-border accent cards */
-    .card-left  { border-left: 4px solid var(--border); }
-    .card-left.active-green  { border-left-color: var(--green); }
-    .card-left.active-green::after  { background: linear-gradient(90deg, rgba(34,197,94,0.07) 0%, transparent 60%); opacity: 1; }
-    .card-left.active-blue   { border-left-color: var(--blue); }
-    .card-left.active-blue::after   { background: linear-gradient(90deg, rgba(56,189,248,0.07) 0%, transparent 60%); opacity: 1; }
-    .card-left.active-orange { border-left-color: var(--accent); }
-    .card-left.active-orange::after { background: linear-gradient(90deg, rgba(249,115,22,0.07) 0%, transparent 60%); opacity: 1; }
-    .card-left.active-yellow { border-left-color: var(--accent2); }
-    .card-left.active-yellow::after { background: linear-gradient(90deg, rgba(250,204,21,0.07) 0%, transparent 60%); opacity: 1; }
-    .card-left.active-purple { border-left-color: var(--purple); }
-    .card-left.active-purple::after { background: linear-gradient(90deg, rgba(167,139,250,0.07) 0%, transparent 60%); opacity: 1; }
-    .card-left.active-red    { border-left-color: var(--red); }
+    .to { border-top-color: #f97316; }
+    .tb { border-top-color: #38bdf8; }
+    .tg { border-top-color: #22c55e; }
+    .tp { border-top-color: #a78bfa; }
+    .tr { border-top-color: #ef4444; }
+    .ty { border-top-color: #facc15; }
 
-    /* Top-border accent cards */
-    .card-top { border-top: 3px solid var(--border); }
-    .card-top.t-orange { border-top-color: var(--accent); }
-    .card-top.t-blue   { border-top-color: var(--blue); }
-    .card-top.t-green  { border-top-color: var(--green); }
-    .card-top.t-purple { border-top-color: var(--purple); }
-    .card-top.t-red    { border-top-color: var(--red); }
-    .card-top.t-yellow { border-top-color: var(--accent2); }
+    .co2 { color: #f97316; }
+    .cb2 { color: #38bdf8; }
+    .cg2 { color: #22c55e; }
+    .cp2 { color: #a78bfa; }
+    .cr2 { color: #ef4444; }
+    .cm  { color: #666; }
 
-    /* Card inner layout */
-    .card-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    /* Scene CTA */
+    .scene {
+      background: #161616; border: 1px solid #2a2a2a; border-left: 4px solid #f97316;
+      border-radius: 4px; padding: 20px 16px;
+      display: -webkit-box; display: -webkit-flex; display: flex;
+      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+      gap: 14px; cursor: pointer; -webkit-user-select: none; user-select: none;
     }
+    .scene:active { opacity: 0.75; }
+    .scene-icon  { font-size: 2rem; color: #f97316; }
+    .scene-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: #f97316; letter-spacing: 0.06em; line-height: 1; }
+    .scene-desc  { font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; color: #666; letter-spacing: 0.12em; margin-top: 4px; text-transform: uppercase; }
 
-    .card-icon {
-      font-size: 2rem;
-      width: 44px;
-      text-align: center;
-      flex-shrink: 0;
-      transition: filter 0.2s;
+    /* Config */
+    .cfgpanel { background: #161616; border: 1px solid #2a2a2a; border-radius: 4px; overflow: hidden; }
+    .cfgrow {
+      display: -webkit-box; display: -webkit-flex; display: flex;
+      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+      -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
+      gap: 10px; padding: 12px 16px; border-bottom: 1px solid #2a2a2a;
     }
-
-    .card-body { flex: 1; min-width: 0; }
-
-    .card-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      color: var(--muted);
-      text-transform: uppercase;
+    .cfgkey { font-family: 'Share Tech Mono', monospace; font-size: 0.58rem; color: #666; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; -webkit-flex-shrink: 0; flex-shrink: 0; }
+    .cfgval {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; color: #facc15;
+      background: #0e0e0e; border: 1px solid #2a2a2a; border-radius: 3px;
+      padding: 6px 10px; width: 55%; letter-spacing: 0.04em; outline: none;
+      -webkit-appearance: none;
     }
-
-    .card-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 0.04em;
-      line-height: 1.1;
-      margin-top: 2px;
-      transition: color 0.2s;
+    .savebtn {
+      display: block; width: 100%; background: #f97316; color: #000; border: none;
+      padding: 13px; font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
+      letter-spacing: 0.12em; cursor: pointer; -webkit-appearance: none;
     }
-
-    .card-desc {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.55rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-top: 4px;
-      text-transform: uppercase;
-    }
-
-    .card-badge {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      padding: 4px 8px;
-      border-radius: 3px;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      flex-shrink: 0;
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    /* Grid for quick action cards */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 8px;
-    }
-
-    .grid-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 16px 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.1s, background 0.15s;
-      position: relative;
-      overflow: hidden;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    .grid-card:active { transform: scale(0.94); background: #1e1e1e; }
-
-    .grid-icon { font-size: 1.4rem; }
-
-    .grid-label {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem;
-      letter-spacing: 0.04em;
-      margin-top: 8px;
-      line-height: 1;
-    }
-
-    .grid-desc {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.5rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      margin-top: 4px;
-      text-transform: uppercase;
-    }
-
-    /* Colour state helpers */
-    .col-green  { color: var(--green) !important; }
-    .col-blue   { color: var(--blue) !important; }
-    .col-orange { color: var(--accent) !important; }
-    .col-yellow { color: var(--accent2) !important; }
-    .col-purple { color: var(--purple) !important; }
-    .col-red    { color: var(--red) !important; }
-    .col-muted  { color: var(--muted) !important; }
-
-    .glow-green  { filter: drop-shadow(0 0 6px rgba(34,197,94,0.7)); }
-    .glow-blue   { filter: drop-shadow(0 0 6px rgba(56,189,248,0.7)); }
-    .glow-orange { filter: drop-shadow(0 0 6px rgba(249,115,22,0.7)); }
-    .glow-yellow { filter: drop-shadow(0 0 6px rgba(250,204,21,0.7)); }
-    .glow-purple { filter: drop-shadow(0 0 6px rgba(167,139,250,0.7)); }
-
-    /* Config panel */
-    .config-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .config-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .config-row:last-of-type { border-bottom: none; }
-
-    .config-key {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .config-val {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent2);
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 6px 10px;
-      width: 55%;
-      letter-spacing: 0.04em;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    .config-val:focus { border-color: var(--accent); }
-    .config-val[type="password"] { letter-spacing: 0.2em; }
-
-    .save-btn {
-      width: 100%;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 12px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-
-    .save-btn:active { opacity: 0.8; }
+    .savebtn:active { opacity: 0.8; }
 
     /* Toast */
     #toast {
-      position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
-      left: 50%;
-      transform: translateX(-50%) translateY(60px);
-      background: #1e1e1e;
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: 4px;
-      padding: 10px 18px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      color: var(--text);
-      z-index: 1000;
-      transition: transform 0.3s ease;
+      position: fixed; bottom: 20px; left: 50%;
+      -webkit-transform: translateX(-50%) translateY(80px);
+      transform: translateX(-50%) translateY(80px);
+      background: #1e1e1e; border: 1px solid #2a2a2a; border-left: 3px solid #f97316;
+      border-radius: 4px; padding: 10px 18px;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+      color: #e8e8e8; z-index: 1000;
+      -webkit-transition: -webkit-transform 0.3s ease; transition: transform 0.3s ease;
       white-space: nowrap;
     }
+    #toast.show { -webkit-transform: translateX(-50%) translateY(0); transform: translateX(-50%) translateY(0); }
 
-    #toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* Loading spinner inside cards */
-    .spinning { animation: spin 0.7s linear infinite; display: inline-block; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .spacer { height: 30px; }
   </style>
 </head>
 <body>
 
-  <header>
+  <div class="hdr">
     <div>
       <div class="brand-name">LayerBru</div>
       <div class="brand-sub">Workshop Control // Garage</div>
@@ -413,523 +204,458 @@
       <div id="clock">--:--:--</div>
       <div id="date">--- -- ----</div>
     </div>
-  </header>
-
-  <div class="status-bar">
-    <span><span class="dot red" id="ha-dot"></span><span id="ha-text">CONNECTING...</span></span>
-    <span>|</span>
-    <span><span class="dot green"></span>NETWORK OK</span>
   </div>
 
-  <main>
+  <div class="sbar">
+    <span><span class="dot dr" id="ha-dot"></span><span id="ha-text">CONNECTING...</span></span>
+    <span>|</span>
+    <span><span class="dot dg"></span>NETWORK OK</span>
+  </div>
 
-    <!-- ── Garage ─────────────────────────────────────── -->
-    <div>
-      <div class="section-label">// Garage</div>
+  <div class="main">
 
-      <div class="card card-left" id="card-garage" onclick="toggleGarage()">
-        <div class="card-row">
-          <div class="card-icon" id="icon-garage">🚗</div>
-          <div class="card-body">
-            <div class="card-label">GARAGE DOOR</div>
-            <div class="card-value col-muted" id="val-garage">LOADING...</div>
-            <div class="card-desc">TAP TO TOGGLE</div>
+    <!-- Garage -->
+    <div class="section">
+      <div class="sec-lbl">// Garage</div>
+      <div class="card" id="card-garage" onclick="toggleGarage()">
+        <div class="crow">
+          <div class="cicon" id="icon-garage">&#x1F697;</div>
+          <div class="cbody">
+            <div class="clbl">GARAGE DOOR</div>
+            <div class="cval" id="val-garage">LOADING...</div>
+            <div class="cdesc">TAP TO TOGGLE</div>
           </div>
-          <div class="card-badge" id="badge-garage">--</div>
+          <div class="cbadge" id="badge-garage">--</div>
         </div>
       </div>
     </div>
 
-    <!-- ── Office ─────────────────────────────────────── -->
-    <div>
-      <div class="section-label">// Office Monitors</div>
+    <!-- Office -->
+    <div class="section">
+      <div class="sec-lbl">// Office Monitors</div>
 
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div class="card card-left" id="card-left-mon" onclick="toggleSwitch('switch.sonoff_1000744063','card-left-mon','val-left-mon','icon-left-mon','badge-left-mon')">
-          <div class="card-row">
-            <div class="card-icon" id="icon-left-mon">🖥️</div>
-            <div class="card-body">
-              <div class="card-label">LEFT MONITOR</div>
-              <div class="card-value col-muted" id="val-left-mon">LOADING...</div>
-            </div>
-            <div class="card-badge" id="badge-left-mon">--</div>
+      <div class="card" id="card-lmon" onclick="toggleSwitch('switch.sonoff_1000744063','lmon')">
+        <div class="crow">
+          <div class="cicon" id="icon-lmon">&#x1F5A5;</div>
+          <div class="cbody">
+            <div class="clbl">LEFT MONITOR</div>
+            <div class="cval" id="val-lmon">LOADING...</div>
           </div>
+          <div class="cbadge" id="badge-lmon">--</div>
         </div>
+      </div>
 
-        <div class="card card-left" id="card-right-mon" onclick="toggleSwitch('switch.sonoff_100075a505','card-right-mon','val-right-mon','icon-right-mon','badge-right-mon')">
-          <div class="card-row">
-            <div class="card-icon" id="icon-right-mon">🖥️</div>
-            <div class="card-body">
-              <div class="card-label">RIGHT MONITOR</div>
-              <div class="card-value col-muted" id="val-right-mon">LOADING...</div>
-            </div>
-            <div class="card-badge" id="badge-right-mon">--</div>
+      <div class="card" id="card-rmon" onclick="toggleSwitch('switch.sonoff_100075a505','rmon')">
+        <div class="crow">
+          <div class="cicon" id="icon-rmon">&#x1F5A5;</div>
+          <div class="cbody">
+            <div class="clbl">RIGHT MONITOR</div>
+            <div class="cval" id="val-rmon">LOADING...</div>
           </div>
+          <div class="cbadge" id="badge-rmon">--</div>
         </div>
+      </div>
 
-        <div class="grid-2">
-          <div class="grid-card card-top t-blue" onclick="bothMonitors('turn_on')">
-            <div class="grid-icon col-blue">⚡</div>
-            <div class="grid-label col-blue">BOTH ON</div>
-            <div class="grid-desc">ALL MONITORS</div>
-          </div>
-          <div class="grid-card card-top t-red" onclick="bothMonitors('turn_off')">
-            <div class="grid-icon col-red">⭘</div>
-            <div class="grid-label col-red">BOTH OFF</div>
-            <div class="grid-desc">ALL MONITORS</div>
-          </div>
+      <div class="g2">
+        <div class="ac tb" onclick="bothMonitors('turn_on')">
+          <div class="aicon cb2">&#9889;</div>
+          <div class="aname cb2">BOTH ON</div>
+          <div class="adesc">ALL MONITORS</div>
+        </div>
+        <div class="ac tr" onclick="bothMonitors('turn_off')">
+          <div class="aicon cr2">&#9711;</div>
+          <div class="aname cr2">BOTH OFF</div>
+          <div class="adesc">ALL MONITORS</div>
         </div>
       </div>
     </div>
 
-    <!-- ── Bedroom ────────────────────────────────────── -->
-    <div>
-      <div class="section-label">// Bedroom</div>
+    <!-- Bedroom -->
+    <div class="section">
+      <div class="sec-lbl">// Bedroom</div>
 
-      <div style="display:flex;flex-direction:column;gap:10px;">
-
-        <div class="card card-left" id="card-aircon" onclick="moreInfoAircon()">
-          <div class="card-row">
-            <div class="card-icon" id="icon-aircon">❄️</div>
-            <div class="card-body">
-              <div class="card-label">BEDROOM AIRCON</div>
-              <div class="card-value col-muted" id="val-aircon">LOADING...</div>
-              <div class="card-desc" id="desc-aircon">TAP FOR CONTROLS</div>
-            </div>
-            <div class="card-badge" id="badge-aircon">--</div>
+      <div class="card" id="card-aircon" onclick="openHA('/lovelace/bedroom')">
+        <div class="crow">
+          <div class="cicon" id="icon-aircon">&#10052;</div>
+          <div class="cbody">
+            <div class="clbl">BEDROOM AIRCON</div>
+            <div class="cval" id="val-aircon">LOADING...</div>
+            <div class="cdesc" id="desc-aircon">TAP FOR FULL CONTROLS</div>
           </div>
+          <div class="cbadge" id="badge-aircon">--</div>
         </div>
-
-        <!-- Aircon quick modes -->
-        <div class="grid-4">
-          <div class="grid-card card-top t-blue" onclick="setHvac('cool')">
-            <div class="grid-icon col-blue">❄️</div>
-            <div class="grid-label col-blue">COOL</div>
-          </div>
-          <div class="grid-card card-top t-orange" onclick="setHvac('heat')">
-            <div class="grid-icon col-orange">🔥</div>
-            <div class="grid-label col-orange">HEAT</div>
-          </div>
-          <div class="grid-card card-top t-green" onclick="setHvac('fan_only')">
-            <div class="grid-icon col-green">💨</div>
-            <div class="grid-label col-green">FAN</div>
-          </div>
-          <div class="grid-card card-top t-red" onclick="setHvac('off')">
-            <div class="grid-icon col-red">⭘</div>
-            <div class="grid-label col-red">OFF</div>
-          </div>
-        </div>
-
-        <!-- TV Lights -->
-        <div class="card card-left" id="card-tvlights" onclick="toggleLight()">
-          <div class="card-row">
-            <div class="card-icon" id="icon-tvlights">💡</div>
-            <div class="card-body">
-              <div class="card-label">TV LIGHTS</div>
-              <div class="card-value col-muted" id="val-tvlights">LOADING...</div>
-            </div>
-            <div class="card-badge" id="badge-tvlights">--</div>
-          </div>
-        </div>
-
-        <!-- Light colour presets -->
-        <div class="grid-4">
-          <div class="grid-card card-top t-orange" onclick="setLightColour(255,147,41,160)">
-            <div class="grid-icon col-orange">🟠</div>
-            <div class="grid-label col-orange">WARM</div>
-          </div>
-          <div class="grid-card card-top t-blue" onclick="setLightColour(56,189,248,160)">
-            <div class="grid-icon col-blue">🔵</div>
-            <div class="grid-label col-blue">COOL</div>
-          </div>
-          <div class="grid-card card-top t-purple" onclick="setLightColour(167,139,250,140)">
-            <div class="grid-icon col-purple">🟣</div>
-            <div class="grid-label col-purple">PURPLE</div>
-          </div>
-          <div class="grid-card card-top" onclick="setLightColour(null,null,null,null,true)">
-            <div class="grid-icon col-muted">⭘</div>
-            <div class="grid-label col-muted">OFF</div>
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <!-- ── Scenes ─────────────────────────────────────── -->
-    <div>
-      <div class="section-label">// Scenes</div>
-      <div class="card card-left active-orange" onclick="activateScene()">
-        <div class="card-row">
-          <div class="card-icon col-orange glow-orange">🖨️</div>
-          <div class="card-body">
-            <div class="card-label">SCENE</div>
-            <div class="card-value col-orange">WORKSHOP MODE</div>
-            <div class="card-desc">GARAGE · MONITORS · LIGHTS</div>
+      <div class="g4">
+        <div class="ac tb" onclick="setHvac('cool')">
+          <div class="aicon cb2">&#10052;</div>
+          <div class="aname cb2">COOL</div>
+        </div>
+        <div class="ac to" onclick="setHvac('heat')">
+          <div class="aicon co2">&#128293;</div>
+          <div class="aname co2">HEAT</div>
+        </div>
+        <div class="ac tg" onclick="setHvac('fan_only')">
+          <div class="aicon cg2">&#128168;</div>
+          <div class="aname cg2">FAN</div>
+        </div>
+        <div class="ac tr" onclick="setHvac('off')">
+          <div class="aicon cr2">&#9711;</div>
+          <div class="aname cr2">OFF</div>
+        </div>
+      </div>
+
+      <div class="card" id="card-tvlight" onclick="toggleLight()">
+        <div class="crow">
+          <div class="cicon" id="icon-tvlight">&#128161;</div>
+          <div class="cbody">
+            <div class="clbl">TV LIGHTS</div>
+            <div class="cval" id="val-tvlight">LOADING...</div>
           </div>
-          <div class="card-badge" style="border-color:#F97316;color:#F97316;">▶ RUN</div>
+          <div class="cbadge" id="badge-tvlight">--</div>
+        </div>
+      </div>
+
+      <div class="g4">
+        <div class="ac to" onclick="setColour(255,147,41,160)">
+          <div class="aicon co2">&#11044;</div>
+          <div class="aname co2">WARM</div>
+        </div>
+        <div class="ac tb" onclick="setColour(56,189,248,160)">
+          <div class="aicon cb2">&#11044;</div>
+          <div class="aname cb2">COOL</div>
+        </div>
+        <div class="ac tp" onclick="setColour(167,139,250,140)">
+          <div class="aicon cp2">&#11044;</div>
+          <div class="aname cp2">PURPLE</div>
+        </div>
+        <div class="ac" onclick="lightOff()">
+          <div class="aicon cm">&#9711;</div>
+          <div class="aname cm">OFF</div>
         </div>
       </div>
     </div>
 
-    <!-- ── Quick links ────────────────────────────────── -->
-    <div>
-      <div class="section-label">// Open in Home Assistant</div>
-      <div class="grid-2">
-        <div class="grid-card card-top t-orange" id="link-garage" onclick="openHA('/lovelace/garage')">
-          <div class="grid-icon col-orange">🚗</div>
-          <div class="grid-label col-orange">GARAGE</div>
-          <div class="grid-desc">HA DASHBOARD</div>
-        </div>
-        <div class="grid-card card-top t-blue" id="link-office" onclick="openHA('/lovelace/office')">
-          <div class="grid-icon col-blue">🖥️</div>
-          <div class="grid-label col-blue">OFFICE</div>
-          <div class="grid-desc">HA DASHBOARD</div>
-        </div>
-        <div class="grid-card card-top t-purple" id="link-bedroom" onclick="openHA('/lovelace/bedroom')">
-          <div class="grid-icon col-purple">🛏️</div>
-          <div class="grid-label col-purple">BEDROOM</div>
-          <div class="grid-desc">HA DASHBOARD</div>
-        </div>
-        <div class="grid-card card-top t-green" onclick="openHA('/config/automation/dashboard')">
-          <div class="grid-icon col-green">⚡</div>
-          <div class="grid-label col-green">AUTOMATIONS</div>
-          <div class="grid-desc">HA DASHBOARD</div>
+    <!-- Scene -->
+    <div class="section">
+      <div class="sec-lbl">// Scenes</div>
+      <div class="scene" onclick="activateScene()">
+        <div class="scene-icon">&#128424;</div>
+        <div>
+          <div class="scene-title">WORKSHOP MODE</div>
+          <div class="scene-desc">GARAGE &middot; MONITORS &middot; LIGHTS</div>
         </div>
       </div>
     </div>
 
-    <!-- ── Config ─────────────────────────────────────── -->
-    <div>
-      <div class="section-label">// Configuration</div>
-      <div class="config-panel">
-        <div class="config-row">
-          <div class="config-key">HA IP ADDRESS</div>
-          <input class="config-val" id="cfg-ip" type="text" placeholder="192.168.1.x" />
+    <!-- HA Links -->
+    <div class="section">
+      <div class="sec-lbl">// Open in Home Assistant</div>
+      <div class="g2" style="margin-bottom:10px;">
+        <div class="ac to" onclick="openHA('/lovelace/garage')">
+          <div class="aicon co2">&#x1F697;</div>
+          <div class="aname co2">GARAGE</div>
+          <div class="adesc">HA DASHBOARD</div>
         </div>
-        <div class="config-row">
-          <div class="config-key">PORT</div>
-          <input class="config-val" id="cfg-port" type="text" placeholder="8123" />
+        <div class="ac tb" onclick="openHA('/lovelace/office')">
+          <div class="aicon cb2">&#x1F5A5;</div>
+          <div class="aname cb2">OFFICE</div>
+          <div class="adesc">HA DASHBOARD</div>
         </div>
-        <div class="config-row">
-          <div class="config-key">ACCESS TOKEN</div>
-          <input class="config-val" id="cfg-token" type="password" placeholder="••••••••••••" />
+      </div>
+      <div class="g2">
+        <div class="ac tp" onclick="openHA('/lovelace/bedroom')">
+          <div class="aicon cp2">&#x1F6CF;</div>
+          <div class="aname cp2">BEDROOM</div>
+          <div class="adesc">HA DASHBOARD</div>
         </div>
-        <div class="config-row">
-          <div class="config-key">TV LIGHTS ENTITY</div>
-          <input class="config-val" id="cfg-tvlight" type="text" placeholder="light.tv_lights" />
+        <div class="ac tg" onclick="openHA('/config/automation/dashboard')">
+          <div class="aicon cg2">&#9889;</div>
+          <div class="aname cg2">AUTOMATIONS</div>
+          <div class="adesc">HA DASHBOARD</div>
         </div>
-        <button class="save-btn" onclick="saveConfig()">SAVE & CONNECT</button>
       </div>
     </div>
 
-  </main>
+    <!-- Config -->
+    <div class="section">
+      <div class="sec-lbl">// Configuration</div>
+      <div class="cfgpanel">
+        <div class="cfgrow">
+          <div class="cfgkey">HA IP</div>
+          <input class="cfgval" id="cfg-ip" type="text" placeholder="192.168.1.x" />
+        </div>
+        <div class="cfgrow">
+          <div class="cfgkey">PORT</div>
+          <input class="cfgval" id="cfg-port" type="text" placeholder="8123" />
+        </div>
+        <div class="cfgrow">
+          <div class="cfgkey">TOKEN</div>
+          <input class="cfgval" id="cfg-token" type="password" placeholder="xxxxxxxxxxx" />
+        </div>
+        <div class="cfgrow">
+          <div class="cfgkey">TV LIGHT</div>
+          <input class="cfgval" id="cfg-tvlight" type="text" placeholder="light.tv_lights" />
+        </div>
+        <button class="savebtn" onclick="saveConfig()">SAVE &amp; CONNECT</button>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+  </div>
 
   <div id="toast"></div>
 
   <script>
-    // ── Config ────────────────────────────────────────────
     function getCfg() {
       return {
-        ip:     localStorage.getItem('ha_ip')     || '',
-        port:   localStorage.getItem('ha_port')   || '8123',
-        token:  localStorage.getItem('ha_token')  || '',
-        tvlight:localStorage.getItem('ha_tvlight')|| 'light.tv_lights',
+        ip:      localStorage.getItem('ha_ip')      || '',
+        port:    localStorage.getItem('ha_port')    || '8123',
+        token:   localStorage.getItem('ha_token')   || '',
+        tvlight: localStorage.getItem('ha_tvlight') || 'light.tv_lights'
       };
     }
 
     function saveConfig() {
-      const ip      = document.getElementById('cfg-ip').value.trim();
-      const port    = document.getElementById('cfg-port').value.trim() || '8123';
-      const token   = document.getElementById('cfg-token').value.trim();
-      const tvlight = document.getElementById('cfg-tvlight').value.trim() || 'light.tv_lights';
-      localStorage.setItem('ha_ip',      ip);
-      localStorage.setItem('ha_port',    port);
-      localStorage.setItem('ha_token',   token);
-      localStorage.setItem('ha_tvlight', tvlight);
-      toast('CONFIG SAVED');
-      loadAllStates();
+      var ip      = document.getElementById('cfg-ip').value;
+      var port    = document.getElementById('cfg-port').value || '8123';
+      var token   = document.getElementById('cfg-token').value;
+      var tvlight = document.getElementById('cfg-tvlight').value || 'light.tv_lights';
+      localStorage.setItem('ha_ip',      ip.trim());
+      localStorage.setItem('ha_port',    port.trim());
+      localStorage.setItem('ha_token',   token.trim());
+      localStorage.setItem('ha_tvlight', tvlight.trim());
+      showToast('CONFIG SAVED');
+      loadAll();
+    }
+
+    function initInputs() {
+      var c = getCfg();
+      document.getElementById('cfg-ip').value      = c.ip;
+      document.getElementById('cfg-port').value    = c.port;
+      document.getElementById('cfg-token').value   = c.token;
+      document.getElementById('cfg-tvlight').value = c.tvlight;
     }
 
     function baseUrl() {
-      const { ip, port } = getCfg();
-      return ip ? `http://${ip}:${port}` : null;
+      var c = getCfg();
+      if (!c.ip) return null;
+      return 'http://' + c.ip + ':' + c.port;
     }
 
-    function headers() {
-      return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getCfg().token}`,
+    function haGet(path, cb) {
+      var base = baseUrl();
+      if (!base) { cb(null); return; }
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', base + '/api' + path, true);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + getCfg().token);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status === 200) {
+          try { cb(JSON.parse(xhr.responseText)); } catch(e) { cb(null); }
+        } else { cb(null); }
       };
+      xhr.onerror   = function() { cb(null); };
+      xhr.timeout   = 5000;
+      xhr.ontimeout = function() { cb(null); };
+      xhr.send();
     }
 
-    // ── Populate config inputs ────────────────────────────
-    function initConfigInputs() {
-      const c = getCfg();
-      document.getElementById('cfg-ip').value     = c.ip;
-      document.getElementById('cfg-port').value   = c.port;
-      document.getElementById('cfg-token').value  = c.token;
-      document.getElementById('cfg-tvlight').value= c.tvlight;
+    function haPost(path, body, cb) {
+      var base = baseUrl();
+      if (!base) { showToast('NO HA IP SET'); if (cb) cb(null); return; }
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', base + '/api' + path, true);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + getCfg().token);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (cb) {
+          try { cb(JSON.parse(xhr.responseText)); } catch(e) { cb(null); }
+        }
+      };
+      xhr.onerror   = function() { showToast('HA UNREACHABLE'); };
+      xhr.timeout   = 5000;
+      xhr.ontimeout = function() { showToast('HA TIMEOUT'); };
+      xhr.send(JSON.stringify(body));
     }
 
-    // ── HA API ────────────────────────────────────────────
-    async function haGet(path) {
-      const base = baseUrl();
-      if (!base) return null;
-      try {
-        const r = await fetch(`${base}/api${path}`, { headers: headers() });
-        if (!r.ok) return null;
-        return await r.json();
-      } catch { return null; }
+    function setStatus(ok) {
+      document.getElementById('ha-dot').className = ok ? 'dot dg' : 'dot dr';
+      document.getElementById('ha-text').textContent = ok ? 'HA ONLINE' : 'HA OFFLINE';
     }
 
-    async function haPost(path, body = {}) {
-      const base = baseUrl();
-      if (!base) { toast('NO HA IP SET'); return null; }
-      try {
-        const r = await fetch(`${base}/api${path}`, {
-          method: 'POST',
-          headers: headers(),
-          body: JSON.stringify(body),
-        });
-        return r.ok ? await r.json() : null;
-      } catch { toast('HA UNREACHABLE'); return null; }
+    function loadAll() {
+      var tv = getCfg().tvlight;
+      var done = 0; var ok = false;
+      function check(result) { if (result) ok = true; done++; if (done >= 5) setStatus(ok); }
+      haGet('/states/cover.smart_garage_door_opener_door_1', function(s) { if (s) updateGarage(s); check(s); });
+      haGet('/states/switch.sonoff_1000744063', function(s) { if (s) updateSwitch(s, 'lmon'); check(s); });
+      haGet('/states/switch.sonoff_100075a505', function(s) { if (s) updateSwitch(s, 'rmon'); check(s); });
+      haGet('/states/climate.bedroom_aircon',   function(s) { if (s) updateAircon(s);         check(s); });
+      haGet('/states/' + tv,                    function(s) { if (s) updateTvLight(s);         check(s); });
     }
 
-    // ── State loading ─────────────────────────────────────
-    async function loadAllStates() {
-      const base = baseUrl();
-      if (!base) {
-        setStatus(false);
-        return;
-      }
-
-      const entities = [
-        'cover.smart_garage_door_opener_door_1',
-        'switch.sonoff_1000744063',
-        'switch.sonoff_100075a505',
-        'climate.bedroom_aircon',
-        getCfg().tvlight,
-      ];
-
-      const results = await Promise.all(entities.map(e => haGet(`/states/${e}`)));
-      const ok = results.some(r => r !== null);
-      setStatus(ok);
-
-      if (results[0]) updateGarage(results[0]);
-      if (results[1]) updateSwitch(results[1], 'card-left-mon',  'val-left-mon',  'icon-left-mon',  'badge-left-mon');
-      if (results[2]) updateSwitch(results[2], 'card-right-mon', 'val-right-mon', 'icon-right-mon', 'badge-right-mon');
-      if (results[3]) updateAircon(results[3]);
-      if (results[4]) updateTvLights(results[4]);
-    }
-
-    // ── Status indicator ──────────────────────────────────
-    function setStatus(online) {
-      const dot  = document.getElementById('ha-dot');
-      const text = document.getElementById('ha-text');
-      if (online) {
-        dot.className = 'dot green';
-        text.textContent = 'HA ONLINE';
-      } else {
-        dot.className = 'dot red';
-        text.textContent = 'HA OFFLINE';
-      }
-    }
-
-    // ── Garage ────────────────────────────────────────────
     function updateGarage(state) {
-      const s   = state.state;
-      const card = document.getElementById('card-garage');
-      const val  = document.getElementById('val-garage');
-      const icon = document.getElementById('icon-garage');
-      const badge= document.getElementById('badge-garage');
-
-      card.className = 'card card-left';
-      if (s === 'open')    { card.classList.add('active-green');  val.className = 'card-value col-green';  icon.textContent = '🟢'; badge.textContent = 'OPEN';    badge.style.color = 'var(--green)';  badge.style.borderColor = 'var(--green)';  }
-      else if (s === 'closed')  { val.className = 'card-value col-muted'; icon.textContent = '🚗'; badge.textContent = 'CLOSED';  badge.style.color = 'var(--muted)'; badge.style.borderColor = 'var(--border)'; }
-      else if (s === 'opening') { card.classList.add('active-green');  val.className = 'card-value col-green';  icon.textContent = '🔼'; badge.textContent = 'OPENING'; badge.style.color = 'var(--green)';  badge.style.borderColor = 'var(--green)';  }
-      else if (s === 'closing') { card.classList.add('active-red');    val.className = 'card-value col-red';    icon.textContent = '🔽'; badge.textContent = 'CLOSING'; badge.style.color = 'var(--red)';    badge.style.borderColor = 'var(--red)';    }
-
+      var s     = state.state;
+      var card  = document.getElementById('card-garage');
+      var val   = document.getElementById('val-garage');
+      var icon  = document.getElementById('icon-garage');
+      var badge = document.getElementById('badge-garage');
+      card.className = 'card';
+      val.className  = 'cval vm';
+      badge.style.color = '#666'; badge.style.borderColor = '#2a2a2a';
+      if (s === 'open')    { card.className='card cg'; val.className='cval vg'; icon.textContent='\u2705'; badge.textContent='OPEN';    badge.style.color='#22c55e'; badge.style.borderColor='#22c55e'; }
+      else if (s==='closed')  { icon.textContent='\u{1F697}'; badge.textContent='CLOSED'; }
+      else if (s==='opening') { card.className='card cg'; val.className='cval vg'; icon.textContent='\u25b2'; badge.textContent='OPENING'; badge.style.color='#22c55e'; badge.style.borderColor='#22c55e'; }
+      else if (s==='closing') { card.className='card cr'; val.className='cval vr'; icon.textContent='\u25bc'; badge.textContent='CLOSING'; badge.style.color='#ef4444'; badge.style.borderColor='#ef4444'; }
       val.textContent = s.toUpperCase();
     }
 
-    async function toggleGarage() {
-      const state = await haGet('/states/cover.smart_garage_door_opener_door_1');
-      const action = state?.state === 'open' ? 'close_cover' : 'open_cover';
-      await haPost('/services/cover/' + action, { entity_id: 'cover.smart_garage_door_opener_door_1' });
-      toast(action === 'open_cover' ? 'GARAGE OPENING...' : 'GARAGE CLOSING...');
-      setTimeout(loadAllStates, 1500);
-    }
-
-    // ── Switches ──────────────────────────────────────────
-    function updateSwitch(state, cardId, valId, iconId, badgeId) {
-      const on   = state.state === 'on';
-      const card = document.getElementById(cardId);
-      const val  = document.getElementById(valId);
-      const icon = document.getElementById(iconId);
-      const badge= document.getElementById(badgeId);
-
-      card.className = 'card card-left' + (on ? ' active-blue' : '');
-      val.className  = 'card-value ' + (on ? 'col-blue' : 'col-muted');
-      val.textContent = on ? '● POWERED ON' : '○ POWERED OFF';
-      icon.textContent = on ? '🖥️' : '🖥️';
-      icon.style.filter = on ? 'drop-shadow(0 0 6px rgba(56,189,248,0.7))' : 'none';
-      badge.textContent = on ? 'ON' : 'OFF';
-      badge.style.color = on ? 'var(--blue)' : 'var(--muted)';
-      badge.style.borderColor = on ? 'var(--blue)' : 'var(--border)';
-    }
-
-    async function toggleSwitch(entityId, cardId, valId, iconId, badgeId) {
-      await haPost('/services/switch/toggle', { entity_id: entityId });
-      toast('TOGGLING...');
-      setTimeout(loadAllStates, 800);
-    }
-
-    async function bothMonitors(action) {
-      await haPost(`/services/switch/${action}`, {
-        entity_id: ['switch.sonoff_1000744063', 'switch.sonoff_100075a505']
-      });
-      toast(action === 'turn_on' ? 'MONITORS ON' : 'MONITORS OFF');
-      setTimeout(loadAllStates, 800);
-    }
-
-    // ── Aircon ────────────────────────────────────────────
-    function updateAircon(state) {
-      const mode    = state.state;
-      const target  = state.attributes.temperature;
-      const current = state.attributes.current_temperature;
-      const card    = document.getElementById('card-aircon');
-      const val     = document.getElementById('val-aircon');
-      const icon    = document.getElementById('icon-aircon');
-      const badge   = document.getElementById('badge-aircon');
-      const desc    = document.getElementById('desc-aircon');
-
-      const modeMap = {
-        cool:     { col: 'col-blue',   cls: 'active-blue',   icon: '❄️', glow: 'rgba(56,189,248,0.7)'   },
-        heat:     { col: 'col-orange', cls: 'active-orange', icon: '🔥', glow: 'rgba(249,115,22,0.7)'   },
-        fan_only: { col: 'col-green',  cls: 'active-green',  icon: '💨', glow: 'rgba(34,197,94,0.7)'    },
-        dry:      { col: 'col-yellow', cls: 'active-yellow', icon: '💧', glow: 'rgba(250,204,21,0.7)'   },
-        off:      { col: 'col-muted',  cls: '',              icon: '❄️', glow: 'none'                   },
-      };
-
-      const m = modeMap[mode] || modeMap.off;
-      card.className = `card card-left ${m.cls}`;
-      val.className  = `card-value ${m.col}`;
-      val.textContent = mode === 'off' ? '○ OFF' : `● ${mode.replace('_',' ').toUpperCase()}`;
-      icon.textContent = m.icon;
-      icon.style.filter = m.glow !== 'none' ? `drop-shadow(0 0 6px ${m.glow})` : 'none';
-
-      const parts = [];
-      if (target)  parts.push(`${target}°C TARGET`);
-      if (current) parts.push(`${current}°C ROOM`);
-      desc.textContent = parts.length ? parts.join('  ·  ') : 'TAP FOR CONTROLS';
-
-      badge.textContent = mode.toUpperCase().replace('_',' ');
-      badge.style.color = `var(--${m.col.replace('col-','')})`;
-      badge.style.borderColor = badge.style.color;
-    }
-
-    async function setHvac(mode) {
-      await haPost('/services/climate/set_hvac_mode', {
-        entity_id: 'climate.bedroom_aircon',
-        hvac_mode: mode,
-      });
-      toast('AIRCON: ' + mode.replace('_',' ').toUpperCase());
-      setTimeout(loadAllStates, 800);
-    }
-
-    function moreInfoAircon() {
-      openHA('/lovelace/bedroom');
-    }
-
-    // ── TV Lights ─────────────────────────────────────────
-    function updateTvLights(state) {
-      const on   = state.state === 'on';
-      const card = document.getElementById('card-tvlights');
-      const val  = document.getElementById('val-tvlights');
-      const icon = document.getElementById('icon-tvlights');
-      const badge= document.getElementById('badge-tvlights');
-      const b    = state.attributes.brightness;
-      const pct  = b ? Math.round(b / 255 * 100) : 100;
-
-      card.className = 'card card-left' + (on ? ' active-yellow' : '');
-      val.className  = 'card-value ' + (on ? 'col-yellow' : 'col-muted');
-      val.textContent = on ? `● ON  ·  ${pct}%` : '○ OFF';
-      icon.textContent = '💡';
-      icon.style.filter = on ? 'drop-shadow(0 0 6px rgba(250,204,21,0.7))' : 'none';
-      badge.textContent = on ? `${pct}%` : 'OFF';
-      badge.style.color = on ? 'var(--accent2)' : 'var(--muted)';
-      badge.style.borderColor = on ? 'var(--accent2)' : 'var(--border)';
-    }
-
-    async function toggleLight() {
-      const entity = getCfg().tvlight;
-      await haPost('/services/light/toggle', { entity_id: entity });
-      toast('TV LIGHTS TOGGLING...');
-      setTimeout(loadAllStates, 800);
-    }
-
-    async function setLightColour(r, g, b, brightness, turnOff = false) {
-      const entity = getCfg().tvlight;
-      if (turnOff) {
-        await haPost('/services/light/turn_off', { entity_id: entity });
-        toast('TV LIGHTS OFF');
-      } else {
-        await haPost('/services/light/turn_on', {
-          entity_id: entity,
-          rgb_color: [r, g, b],
-          brightness: brightness,
+    function toggleGarage() {
+      haGet('/states/cover.smart_garage_door_opener_door_1', function(state) {
+        var action = (state && state.state === 'open') ? 'close_cover' : 'open_cover';
+        haPost('/services/cover/' + action, { entity_id: 'cover.smart_garage_door_opener_door_1' }, function() {
+          showToast(action === 'open_cover' ? 'GARAGE OPENING...' : 'GARAGE CLOSING...');
+          setTimeout(loadAll, 1500);
         });
-        toast('TV LIGHTS UPDATED');
-      }
-      setTimeout(loadAllStates, 800);
+      });
     }
 
-    // ── Scene ─────────────────────────────────────────────
-    async function activateScene() {
-      await haPost('/services/scene/turn_on', { entity_id: 'scene.workshop_mode' });
-      toast('WORKSHOP MODE ACTIVATED');
-      setTimeout(loadAllStates, 2000);
+    function updateSwitch(state, key) {
+      var on    = state.state === 'on';
+      var card  = document.getElementById('card-' + key);
+      var val   = document.getElementById('val-' + key);
+      var badge = document.getElementById('badge-' + key);
+      card.className  = 'card' + (on ? ' cb' : '');
+      val.className   = 'cval ' + (on ? 'vb' : 'vm');
+      val.textContent = on ? '\u25cf POWERED ON' : '\u25cb POWERED OFF';
+      badge.textContent = on ? 'ON' : 'OFF';
+      badge.style.color = on ? '#38bdf8' : '#666';
+      badge.style.borderColor = on ? '#38bdf8' : '#2a2a2a';
     }
 
-    // ── Open HA ───────────────────────────────────────────
+    function toggleSwitch(entityId, key) {
+      haPost('/services/switch/toggle', { entity_id: entityId }, function() {
+        showToast('TOGGLING...');
+        setTimeout(loadAll, 800);
+      });
+    }
+
+    function bothMonitors(action) {
+      haPost('/services/switch/' + action, {
+        entity_id: ['switch.sonoff_1000744063', 'switch.sonoff_100075a505']
+      }, function() {
+        showToast(action === 'turn_on' ? 'MONITORS ON' : 'MONITORS OFF');
+        setTimeout(loadAll, 800);
+      });
+    }
+
+    function updateAircon(state) {
+      var mode    = state.state;
+      var target  = state.attributes.temperature;
+      var current = state.attributes.current_temperature;
+      var card    = document.getElementById('card-aircon');
+      var val     = document.getElementById('val-aircon');
+      var icon    = document.getElementById('icon-aircon');
+      var badge   = document.getElementById('badge-aircon');
+      var desc    = document.getElementById('desc-aircon');
+      card.className = 'card';
+      val.className  = 'cval vm';
+      badge.style.color = '#666'; badge.style.borderColor = '#2a2a2a';
+      if (mode === 'cool')     { card.className='card cb'; val.className='cval vb'; icon.textContent='\u2744'; badge.style.color='#38bdf8'; badge.style.borderColor='#38bdf8'; }
+      else if (mode === 'heat'){ card.className='card co'; val.className='cval vo'; icon.textContent='\ud83d\udd25'; badge.style.color='#f97316'; badge.style.borderColor='#f97316'; }
+      else if (mode === 'fan_only'){ card.className='card cg'; val.className='cval vg'; icon.textContent='\ud83d\udca8'; badge.style.color='#22c55e'; badge.style.borderColor='#22c55e'; }
+      val.textContent = mode === 'off' ? '\u25cb OFF' : '\u25cf ' + mode.replace('_',' ').toUpperCase();
+      badge.textContent = mode.replace('_',' ').toUpperCase();
+      var parts = [];
+      if (target)  parts.push(target + '\u00b0C TARGET');
+      if (current) parts.push(current + '\u00b0C ROOM');
+      desc.textContent = parts.length ? parts.join('  \u00b7  ') : 'TAP FOR FULL CONTROLS';
+    }
+
+    function setHvac(mode) {
+      haPost('/services/climate/set_hvac_mode', { entity_id: 'climate.bedroom_aircon', hvac_mode: mode }, function() {
+        showToast('AIRCON: ' + mode.replace('_',' ').toUpperCase());
+        setTimeout(loadAll, 800);
+      });
+    }
+
+    function updateTvLight(state) {
+      var on    = state.state === 'on';
+      var b     = state.attributes.brightness;
+      var pct   = b ? Math.round(b / 255 * 100) : 100;
+      var card  = document.getElementById('card-tvlight');
+      var val   = document.getElementById('val-tvlight');
+      var badge = document.getElementById('badge-tvlight');
+      card.className  = 'card' + (on ? ' cy' : '');
+      val.className   = 'cval ' + (on ? 'vy' : 'vm');
+      val.textContent = on ? '\u25cf ON  \u00b7  ' + pct + '%' : '\u25cb OFF';
+      badge.textContent = on ? pct + '%' : 'OFF';
+      badge.style.color = on ? '#facc15' : '#666';
+      badge.style.borderColor = on ? '#facc15' : '#2a2a2a';
+    }
+
+    function toggleLight() {
+      haPost('/services/light/toggle', { entity_id: getCfg().tvlight }, function() {
+        showToast('TV LIGHTS TOGGLING...');
+        setTimeout(loadAll, 800);
+      });
+    }
+
+    function setColour(r, g, b, brightness) {
+      haPost('/services/light/turn_on', { entity_id: getCfg().tvlight, rgb_color: [r,g,b], brightness: brightness }, function() {
+        showToast('TV LIGHTS UPDATED');
+        setTimeout(loadAll, 800);
+      });
+    }
+
+    function lightOff() {
+      haPost('/services/light/turn_off', { entity_id: getCfg().tvlight }, function() {
+        showToast('TV LIGHTS OFF');
+        setTimeout(loadAll, 800);
+      });
+    }
+
+    function activateScene() {
+      haPost('/services/scene/turn_on', { entity_id: 'scene.workshop_mode' }, function() {
+        showToast('WORKSHOP MODE ACTIVATED');
+        setTimeout(loadAll, 2000);
+      });
+    }
+
     function openHA(path) {
-      const base = baseUrl();
-      if (!base) { toast('NO HA IP SET'); return; }
-      window.open(base + path, '_blank');
+      var base = baseUrl();
+      if (!base) { showToast('NO HA IP SET'); return; }
+      window.location.href = base + path;
     }
 
-    // ── Toast ─────────────────────────────────────────────
-    let toastTimer;
-    function toast(msg) {
-      const el = document.getElementById('toast');
+    var toastTimer = null;
+    function showToast(msg) {
+      var el = document.getElementById('toast');
       el.textContent = msg;
-      el.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+      el.className = 'show';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { el.className = ''; }, 2200);
     }
 
-    // ── Clock ─────────────────────────────────────────────
     function tick() {
-      const now = new Date();
+      var now = new Date();
+      var h = now.getHours(); var m = now.getMinutes(); var s = now.getSeconds();
       document.getElementById('clock').textContent =
-        now.toLocaleTimeString('en-ZA', { hour12: false });
+        (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+      var days   = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+      var months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
       document.getElementById('date').textContent =
-        now.toLocaleDateString('en-ZA', { weekday:'short', day:'2-digit', month:'short', year:'numeric' }).toUpperCase();
+        days[now.getDay()]+' '+(now.getDate()<10?'0':'')+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
     }
+
     tick();
     setInterval(tick, 1000);
-
-    // ── Auto-refresh states every 15s ────────────────────
-    setInterval(loadAllStates, 15000);
-
-    // ── Service worker ────────────────────────────────────
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-
-    // ── Init ──────────────────────────────────────────────
-    initConfigInputs();
-    loadAllStates();
+    setInterval(loadAll, 15000);
+    initInputs();
+    loadAll();
   </script>
 </body>
 </html>
